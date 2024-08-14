@@ -14,7 +14,7 @@ export const CurrenciesScreen = () => {
   }
 
   return (
-    <View>
+    <View testID="container">
       <Text>Currencies should be listed below</Text>
     </View>
   );
