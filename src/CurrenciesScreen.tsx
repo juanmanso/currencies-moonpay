@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { CurrenciesListHeader, CurrenciesListItem } from "./components";
 import { useCurrencies } from "./hooks/useCurrencies";
 
 export const CurrenciesScreen = () => {
-  const { isLoading, isError } = useCurrencies();
+  const { data, isLoading, isError } = useCurrencies();
 
   if (isLoading) {
     return <Text testID="loading">Loading...</Text>;
@@ -16,6 +17,12 @@ export const CurrenciesScreen = () => {
   return (
     <View testID="container">
       <Text>Currencies should be listed below</Text>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <CurrenciesListItem item={item} />}
+        keyExtractor={(item) => item.code}
+        ListHeaderComponent={<CurrenciesListHeader />}
+      />
     </View>
   );
 };
