@@ -25,12 +25,9 @@ export const CurrenciesScreen = () => {
 
   useEffect(() => {
     if (sortBy) {
-      setFilteredData((prevState) => {
-        const sortedData = [...prevState].sort((a, b) =>
-          a[sortBy] > b[sortBy] ? 1 : -1
-        );
-        return sortedData;
-      });
+      setFilteredData((prevState) =>
+        [...prevState].sort((a, b) => (a[sortBy] > b[sortBy] ? 1 : -1))
+      );
     }
   }, [sortBy]);
 
