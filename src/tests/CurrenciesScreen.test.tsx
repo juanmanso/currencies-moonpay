@@ -27,7 +27,7 @@ describe("CurrenciesScreen", () => {
   it("should display error message when there is an error fetching data", () => {
     // Arrange
     const useCurrenciesMock = jest
-      .spyOn(require("./hooks/useCurrencies"), "useCurrencies")
+      .spyOn(require("../hooks/useCurrencies"), "useCurrencies")
       .mockReturnValueOnce({
         data: null,
         isLoading: false,
