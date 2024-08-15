@@ -86,8 +86,9 @@ describe("CurrenciesScreen", () => {
       // Assert
       waitFor(() => {
         expect(screen.getByTestId("switchToggle").props.value).toBe(true);
-        const result = screen.getByText("false");
-        expect(result).toHaveLength(0);
+        // Replaced getBy since it throws an error if not found so it's more precise to use query instead
+        const result = screen.queryByText("false");
+        expect(result).toBeNull();
         useCurrenciesMock.mockRestore();
       });
     });
