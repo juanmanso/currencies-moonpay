@@ -23,7 +23,7 @@ export const CurrenciesListItem: React.FC<ICurrenciesListItemProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     padding: 10,
     borderBottomWidth: 1,
     borderColor: "#ddd",

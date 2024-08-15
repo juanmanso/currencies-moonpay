@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-
     backgroundColor: "#f4f4f4",
     borderBottomWidth: 1,
     borderColor: "#ddd",
