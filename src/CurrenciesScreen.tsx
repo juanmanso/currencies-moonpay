@@ -1,9 +1,40 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Switch, Text, View } from "react-native";
+import { CurrenciesListHeader, CurrenciesListItem } from "./components";
 import { useCurrencies } from "./hooks/useCurrencies";
+import { Currencies } from "./types";
 
 export const CurrenciesScreen = () => {
-  const { isLoading, isError } = useCurrencies();
+  const { data, isLoading, isError } = useCurrencies();
+  const [filteredData, setFilteredData] = useState<Currencies>([]);
+  const [showTestMode, setShowTestMode] = useState(false);
+  const [sortBy, setSortBy] = useState<"name" | "code">();
+
+  const sortByName = () => setSortBy("name");
+  const sortByCode = () => setSortBy("code");
+
+  useEffect(() => {
+    if (data) {
+      if (showTestMode) {
+        setFilteredData(data.filter((item) => item.supportsTestMode));
+      } else {
+        setFilteredData(data);
+      }
+    }
+  }, [data, showTestMode]);
+
+  useEffect(() => {
+    if (sortBy === "name") {
+      // Create new array to avoid mutating in place and to trigger a re-render
+      setFilteredData((prevState) => [
+        ...prevState.sort((a, b) => (a.name > b.name ? 1 : -1)),
+      ]);
+    } else if (sortBy === "code") {
+      setFilteredData((prevState) => [
+        ...prevState.sort((a, b) => (a.code > b.code ? 1 : -1)),
+      ]);
+    }
+  }, [sortBy]);
 
   if (isLoading) {
     return <Text testID="loading">Loading...</Text>;
@@ -15,7 +46,28 @@ export const CurrenciesScreen = () => {
 
   return (
     <View testID="container">
-      <Text>Currencies should be listed below</Text>
+      <View>
+        <Text>Toggle test mode filtering</Text>
+        <Switch
+          testID="switchToggle"
+          trackColor={{ false: "#767577", true: "#81b0ff" }}
+          thumbColor={showTestMode ? "#f5dd4b" : "#f4f3f4"}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={setShowTestMode}
+          value={showTestMode}
+        />
+      </View>
+      <FlatList
+        data={filteredData}
+        renderItem={({ item }) => <CurrenciesListItem item={item} />}
+        keyExtractor={(item) => item.code}
+        ListHeaderComponent={() => (
+          <CurrenciesListHeader
+            onNamePress={sortByName}
+            onCodePress={sortByCode}
+          />
+        )}
+      />
     </View>
   );
 };
