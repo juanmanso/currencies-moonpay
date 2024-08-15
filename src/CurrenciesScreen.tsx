@@ -14,10 +14,12 @@ export const CurrenciesScreen = () => {
   const sortByCode = () => setSortBy("code");
 
   useEffect(() => {
-    if (showTestMode) {
-      setFilteredData(data.filter((item) => item.supportsTestMode));
-    } else {
-      setFilteredData(data);
+    if (data) {
+      if (showTestMode) {
+        setFilteredData(data.filter((item) => item.supportsTestMode));
+      } else {
+        setFilteredData(data);
+      }
     }
   }, [data, showTestMode]);
 
@@ -47,6 +49,7 @@ export const CurrenciesScreen = () => {
       <View>
         <Text>Toggle test mode filtering</Text>
         <Switch
+          testID="switchToggle"
           trackColor={{ false: "#767577", true: "#81b0ff" }}
           thumbColor={showTestMode ? "#f5dd4b" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"

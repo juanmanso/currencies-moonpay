@@ -1,5 +1,24 @@
-import { screen, render, waitFor } from "@testing-library/react-native";
+import {
+  screen,
+  render,
+  waitFor,
+  act,
+  fireEvent,
+} from "@testing-library/react-native";
 import { CurrenciesScreen } from "../CurrenciesScreen";
+
+const mockData = [
+  {
+    code: "BTC",
+    name: "Bitcoin",
+    supportsTestMode: true,
+  },
+  {
+    code: "ADA",
+    name: "Cardano",
+    supportsTestMode: false,
+  },
+];
 
 describe("CurrenciesScreen", () => {
   it("should display loading indicator when data is being fetched", () => {
@@ -42,6 +61,33 @@ describe("CurrenciesScreen", () => {
       const errorMessage = screen.getByTestId("error");
       expect(errorMessage).toBeTruthy();
       useCurrenciesMock.mockRestore();
+    });
+  });
+
+  describe("Filtering", () => {
+    it("should filter data based on their support of test mode", () => {
+      // Arrange
+      const useCurrenciesMock = jest
+        .spyOn(require("../hooks/useCurrencies"), "useCurrencies")
+        .mockResolvedValueOnce({
+          data: mockData,
+          isLoading: false,
+          isError: false,
+        });
+      // Arrange
+      render(<CurrenciesScreen />);
+
+      // Act
+      act(() => {
+        fireEvent.press(screen.getByTestId("switchToggle"));
+      });
+
+      // Assert
+      waitFor(() => {
+        const result = screen.getByText("false");
+        expect(result).toHaveLength(0);
+        useCurrenciesMock.mockRestore();
+      });
     });
   });
 });
