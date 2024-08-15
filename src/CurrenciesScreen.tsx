@@ -24,15 +24,13 @@ export const CurrenciesScreen = () => {
   }, [data, showTestMode]);
 
   useEffect(() => {
-    if (sortBy === "name") {
-      // Create new array to avoid mutating in place and to trigger a re-render
-      setFilteredData((prevState) => [
-        ...prevState.sort((a, b) => (a.name > b.name ? 1 : -1)),
-      ]);
-    } else if (sortBy === "code") {
-      setFilteredData((prevState) => [
-        ...prevState.sort((a, b) => (a.code > b.code ? 1 : -1)),
-      ]);
+    if (sortBy) {
+      setFilteredData((prevState) => {
+        const sortedData = [...prevState].sort((a, b) =>
+          a[sortBy] > b[sortBy] ? 1 : -1
+        );
+        return sortedData;
+      });
     }
   }, [sortBy]);
 
